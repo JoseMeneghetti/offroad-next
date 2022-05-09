@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const LoginContainer = styled.div`
   width: inherit;
-  height: 100vh;
+  height: 85vh;
   display: flex;
   justify-content: center;
   align-items: center;

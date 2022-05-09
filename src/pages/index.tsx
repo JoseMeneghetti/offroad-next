@@ -5,6 +5,7 @@ import { Container } from '../styles/pages/Home'
 import OptionButton from '../components/OptionButtons/OptionButton'
 import ProductSummary from '../components/ProductSummary/ProductSummary'
 import Layout from '../components/Template/Layout'
+import HomeSearchBox from '../components/HomeSearchBox/HomeSearchBox'
 
 const Home: React.FC = () => {
   return (
@@ -13,8 +14,11 @@ const Home: React.FC = () => {
         subtitulo="Ache sua Moto ou Seu Equipamento Off-Road"
         children={
           <>
-            <OptionButton />
-            <ProductSummary />
+            <HomeSearchBox />
+            <div className='content'>
+              <ProductSummary />
+              <ProductSummary />
+            </div>
           </>
         }
       />
