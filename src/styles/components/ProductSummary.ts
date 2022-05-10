@@ -8,6 +8,7 @@ export const ProductSummaryContainer = styled.div`
   border: 1px solid ${props => props.theme.colors.text};
   border-radius: 0.5rem;
   padding: 0.5rem;
+  margin: 1rem;
   @media (min-width: 769px) {
     max-width: 300px;
   }
