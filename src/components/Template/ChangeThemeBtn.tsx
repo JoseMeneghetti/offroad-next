@@ -14,36 +14,11 @@ const ChangeThemeBtn: React.FC<ChangeThemeBtnProps> = ({
 }) => {
   return tema === 'dark' ? (
     <ThemeBtnContainerDark onClick={changeTheme}>
-      <div
-        className={`icon
-    
-            `}
-      >
-        {IconeSol()}
-      </div>
-      <div
-        className={`text
-            `}
-      >
-        <span className="text-sm">Claro</span>
-      </div>
+      <div className="icon">{IconeSol()}</div>
     </ThemeBtnContainerDark>
   ) : (
     <ThemeBtnContainerLight onClick={changeTheme}>
-      <div
-        className={`
-               text
-            `}
-      >
-        <span className="text-sm">Escuro</span>
-      </div>
-      <div
-        className={`
-                icon
-            `}
-      >
-        {IconeLua()}
-      </div>
+      <div className="icon">{IconeLua()}</div>
     </ThemeBtnContainerLight>
   )
 }
