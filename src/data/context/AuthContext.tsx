@@ -11,7 +11,6 @@ import initFirebase from '../../firebase/config'
 import Usuario from '../../typings/firebase/firebase'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
-import { authUrl } from 'vtex'
 
 type AuthContextProps = {
   user?: Usuario
