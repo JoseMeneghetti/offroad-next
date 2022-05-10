@@ -4,7 +4,7 @@ import { LoginContainer } from '../styles/pages/Login'
 
 const Login: React.FC = ({}) => {
   const { user, logout } = useAuth()
-  console.log(user)
+
   return (
     <LoginContainer>
       <div className="imgContainer">

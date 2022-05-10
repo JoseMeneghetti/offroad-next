@@ -11,7 +11,7 @@ import Link from 'next/link'
 const Menu: React.FC = () => {
   const ctx = useTheme()
   const { user } = useAuth()
-  console.log(user)
+  
   return (
     <MenuContainer>
       <Link href={'/'}>
