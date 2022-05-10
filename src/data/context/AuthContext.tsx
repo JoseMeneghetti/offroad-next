@@ -54,7 +54,7 @@ export const AuthProvider: React.FC<any> = ({ children }) => {
   const [Loading, setLoading] = useState(true)
 
   async function sessionConfig(userFirebase: User) {
-    console.log('userFirebase', userFirebase)
+
     if (userFirebase?.email) {
       const user = await normalUser(userFirebase)
       setUser(user)

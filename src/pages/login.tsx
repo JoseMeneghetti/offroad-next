@@ -12,7 +12,7 @@ const Login: React.FC = ({}) => {
   function handleSubmit() {}
 
   const { user, loginGoogle } = useAuth()
-  console.log(user)
+  
   return (
     <>
       <Menu />
