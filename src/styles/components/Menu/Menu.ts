@@ -8,6 +8,8 @@ export const MenuContainer = styled.div`
   padding: 0.5rem;
   background-color: ${props => props.theme.colors.background_2};
   box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  width: 100%;
+  z-index: 2;
   .logo {
     cursor: pointer;
     display: flex;
@@ -47,8 +49,8 @@ export const MenuContainer = styled.div`
     }
   }
   .avatar {
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
     border-radius: 2rem;
     margin: 0.2rem;
     cursor: pointer;

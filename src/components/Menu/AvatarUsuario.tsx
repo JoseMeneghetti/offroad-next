@@ -1,18 +1,18 @@
 import Link from 'next/link'
+import { IdentificationCard } from 'phosphor-react'
 import useAuth from '../../data/hook/useAuth'
 
-interface AvatarUsuarioProps {
-}
+interface AvatarUsuarioProps {}
 
 const AvatarUsuario: React.FC<AvatarUsuarioProps> = () => {
   const { user } = useAuth()
   return (
     <Link href="/profile">
-      <img
-        src={user?.imagemUrl ?? '/images/avatar.svg'}
-        alt="Avatar do Usuário"
-        className='avatar'
-      />
+      {user.imagemUrl ? (
+        <img src={user?.imagemUrl} alt="Avatar do Usuário" className="avatar" />
+      ) : (
+        <IdentificationCard size={30} />
+      )}
     </Link>
   )
 }

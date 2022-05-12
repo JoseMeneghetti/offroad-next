@@ -1,17 +1,16 @@
 import React from 'react'
-import { MenuContainer } from '../../styles/components/Template/Menu'
+import { MenuContainer } from '../../styles/components/Menu/Menu'
 import MenuItem from './MenuItem'
-import Login from '../../assets/user.svg'
 import useTheme from '../../data/hook/useTheme'
 import ChangeThemeBtn from './ChangeThemeBtn'
 import AvatarUsuario from './AvatarUsuario'
 import useAuth from '../../data/hook/useAuth'
 import Link from 'next/link'
+import { UserCircle } from 'phosphor-react'
 
 const Menu: React.FC = () => {
   const ctx = useTheme()
   const { user } = useAuth()
-  
   return (
     <MenuContainer>
       <Link href={'/'}>
@@ -24,7 +23,7 @@ const Menu: React.FC = () => {
       <ChangeThemeBtn tema={ctx.theme} changeTheme={ctx.changeTheme} />
 
       {!user ? (
-        <MenuItem icone={<Login />} url="/login"></MenuItem>
+        <MenuItem icone={<UserCircle size={30} />} url="/login"></MenuItem>
       ) : (
         <AvatarUsuario />
       )}

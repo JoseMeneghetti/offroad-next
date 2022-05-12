@@ -1,9 +1,7 @@
 import { createContext } from 'react'
 
-type Theme = 'dark' | ''
-
 type ThemeContextProps = {
-  theme: Theme
+  theme: string
   changeTheme: () => void
 }
 

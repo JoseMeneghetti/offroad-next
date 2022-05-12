@@ -4,7 +4,9 @@ import {
   GoogleAuthProvider,
   User,
   onAuthStateChanged,
-  signOut
+  signOut,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
 import initFirebase from '../../firebase/config'
@@ -51,10 +53,9 @@ export const AuthProvider: React.FC<any> = ({ children }) => {
   const router = useRouter()
   const [user, setUser] = useState<Usuario>()
 
-  const [Loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
 
   async function sessionConfig(userFirebase: User) {
-
     if (userFirebase?.email) {
       const user = await normalUser(userFirebase)
       setUser(user)
@@ -73,7 +74,29 @@ export const AuthProvider: React.FC<any> = ({ children }) => {
     try {
       setLoading(true)
       const resp = await signInWithPopup(auth, provider)
-      sessionConfig(resp.user)
+      await sessionConfig(resp.user)
+      router.push('/')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function login(email: string, senha: string) {
+    try {
+      setLoading(true)
+      const resp = await signInWithEmailAndPassword(auth, email, senha)
+      await sessionConfig(resp.user)
+      router.push('/')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function register(email: string, senha: string) {
+    try {
+      setLoading(true)
+      const resp = await createUserWithEmailAndPassword(auth, email, senha)
+      await sessionConfig(resp.user)
       router.push('/')
     } finally {
       setLoading(false)
@@ -91,7 +114,7 @@ export const AuthProvider: React.FC<any> = ({ children }) => {
   }
 
   useEffect(() => {
-    if (Cookies.get('admin-template-cod3r-auth')) {
+    if (Cookies.get('offroad-auth')) {
       const cancel = onAuthStateChanged(auth, sessionConfig)
       return () => cancel()
     } else {
@@ -100,7 +123,9 @@ export const AuthProvider: React.FC<any> = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, loginGoogle, logout }}>
+    <AuthContext.Provider
+      value={{ user, loginGoogle, login, register, logout, loading }}
+    >
       {children}
     </AuthContext.Provider>
   )

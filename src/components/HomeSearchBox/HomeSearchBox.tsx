@@ -4,10 +4,9 @@ import { HomeSearchBoxContainer } from '../../styles/components/HomeSearchBox'
 
 const HomeSearchBox: React.FC = () => {
   const [selectedNavItem, setSelectedNavItem] = useState('moto')
+  const [searchBox, setSearchBox] = useState('')
 
-  function handleNavClick(name: string) {
-    setSelectedNavItem(name)
-  }
+
   return (
     <HomeSearchBoxContainer>
       <div className="NavBar--tabs">
@@ -16,7 +15,7 @@ const HomeSearchBox: React.FC = () => {
             selectedNavItem === 'moto' ? 'active ' : ''
           }`}
           onClick={() => {
-            handleNavClick('moto')
+            setSelectedNavItem('moto')
           }}
         >
           Comprar Motos
@@ -26,12 +25,12 @@ const HomeSearchBox: React.FC = () => {
             selectedNavItem === 'equip' ? 'active ' : ''
           }`}
           onClick={() => {
-            handleNavClick('equip')
+            setSelectedNavItem('equip')
           }}
         >
           Comprar Equipamentos
         </h2>
-        <Link href="/">
+        <Link href="/sell">
           <h2 className="NavBar--item">Quero Vender</h2>
         </Link>
       </div>
@@ -44,6 +43,7 @@ const HomeSearchBox: React.FC = () => {
                   type="text"
                   placeholder="Digite marca ou modelo do carro"
                   value=""
+                  onChange={e => setSearchBox(e.target.value)}
                 />
               </div>
             </div>

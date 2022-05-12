@@ -1,8 +1,8 @@
-import { IconeLua, IconeSol } from './icons'
 import {
   ThemeBtnContainerDark,
   ThemeBtnContainerLight
-} from '../../styles/components/Template/ChangeThemeBtn'
+} from '../../styles/components/Menu/ChangeThemeBtn'
+import { MoonStars, Sun } from 'phosphor-react'
 
 interface ChangeThemeBtnProps {
   tema: string
@@ -14,11 +14,15 @@ const ChangeThemeBtn: React.FC<ChangeThemeBtnProps> = ({
 }) => {
   return tema === 'dark' ? (
     <ThemeBtnContainerDark onClick={changeTheme}>
-      <div className="icon">{IconeSol()}</div>
+      <div className="icon">
+        <Sun size={30} />
+      </div>
     </ThemeBtnContainerDark>
   ) : (
     <ThemeBtnContainerLight onClick={changeTheme}>
-      <div className="icon">{IconeLua()}</div>
+      <div className="icon">
+        <MoonStars size={30} />
+      </div>
     </ThemeBtnContainerLight>
   )
 }
