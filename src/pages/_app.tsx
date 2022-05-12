@@ -30,9 +30,9 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
         }}
       >
         <ThemeProvider
-          theme={theme && theme === 'dark' ? themeDark : themeLight}
+          theme={theme && theme === 'light' ? themeLight : themeDark}
         >
-          <Menu/>
+          <Menu />
           <Component {...pageProps} />
           <GlobalStyle />
         </ThemeProvider>
