@@ -8,7 +8,7 @@ import { AuthProvider } from '../data/context/AuthContext'
 import Menu from '../components/Menu/Menu'
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
-  const [theme, setTheme] = useState<string>('light')
+  const [theme, setTheme] = useState<string>('')
 
   function changeTheme() {
     const newTheme = theme === '' ? 'light' : ''

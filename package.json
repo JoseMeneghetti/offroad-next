@@ -21,6 +21,7 @@
     "react-content-loader": "^6.2.0",
     "react-dom": "18.0.0",
     "react-dropzone": "^14.2.1",
+    "react-image-file-resizer": "^0.4.8",
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.1.1",
