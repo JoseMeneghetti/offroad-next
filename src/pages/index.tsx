@@ -40,6 +40,7 @@ const Home: React.FC = props => {
     return <h1> ERRO 500...</h1>
   }
 
+  console.log(result)
   return (
     <Container>
       <HomeSearchBox
