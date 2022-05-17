@@ -50,6 +50,6 @@ export default async function handle(
 
     res.status(200).json('Sucesso!')
   } catch (error) {
-    res.status(500).json('House um problema com o banco de dados')
+    res.status(500).json(`${error} - House um problema com o banco de dados`)
   }
 }
