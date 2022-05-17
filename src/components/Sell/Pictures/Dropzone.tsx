@@ -18,22 +18,22 @@ const MyDropzone: React.FC<MyDropzoneProps> = ({ handleUpload, setError }) => {
   const onDrop = useCallback(acceptedFiles => {
     // Do something with the files
     acceptedFiles.forEach(element => {
-      if (element.size > 1000000) {
+      console.log(element.size)
+      if (element.size > 5000000) {
         try {
           Resizer.imageFileResizer(
             element,
-            1000,
-            1000,
+            2000,
+            2000,
             'JPEG',
             100,
             0,
             uri => {
-              console.log(uri)
               handleUpload([uri])
             },
             'file',
-            200,
-            200
+            500,
+            500
           )
         } catch (err) {
           showError(`${err} / Problema com as Fotos.`)
