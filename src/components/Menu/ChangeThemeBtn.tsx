@@ -12,18 +12,18 @@ const ChangeThemeBtn: React.FC<ChangeThemeBtnProps> = ({
   tema,
   changeTheme
 }) => {
-  return tema === 'dark' ? (
-    <ThemeBtnContainerDark onClick={changeTheme}>
-      <div className="icon">
-        <Sun size={30} />
-      </div>
-    </ThemeBtnContainerDark>
-  ) : (
+  return tema === 'light' ? (
     <ThemeBtnContainerLight onClick={changeTheme}>
       <div className="icon">
         <MoonStars size={30} />
       </div>
     </ThemeBtnContainerLight>
+  ) : (
+    <ThemeBtnContainerDark onClick={changeTheme}>
+      <div className="icon">
+        <Sun size={30} />
+      </div>
+    </ThemeBtnContainerDark>
   )
 }
 

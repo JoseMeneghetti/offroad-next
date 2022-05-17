@@ -8,10 +8,10 @@ import { AuthProvider } from '../data/context/AuthContext'
 import Menu from '../components/Menu/Menu'
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
-  const [theme, setTheme] = useState<string>('dark')
+  const [theme, setTheme] = useState<string>('light')
 
   function changeTheme() {
-    const newTheme = theme === '' ? 'dark' : ''
+    const newTheme = theme === '' ? 'light' : ''
     setTheme(newTheme)
     localStorage.setItem('theme', newTheme)
   }
@@ -30,9 +30,9 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
         }}
       >
         <ThemeProvider
-          theme={theme && theme === 'dark' ? themeDark : themeLight}
+          theme={theme && theme === 'light' ? themeLight : themeDark}
         >
-          <Menu/>
+          <Menu />
           <Component {...pageProps} />
           <GlobalStyle />
         </ThemeProvider>
