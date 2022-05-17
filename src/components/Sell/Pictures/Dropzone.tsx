@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
+import Resizer from 'react-image-file-resizer'
 
 interface MyDropzoneProps {
   handleUpload: (files) => void
@@ -17,9 +18,27 @@ const MyDropzone: React.FC<MyDropzoneProps> = ({ handleUpload, setError }) => {
   const onDrop = useCallback(acceptedFiles => {
     // Do something with the files
     acceptedFiles.forEach(element => {
-      if (element.size > 1500000) {
-        showError('Fotos precisam ter menos de 2MB!')
-        throw new Error('Fotos precisam ter menos de 2MB!')
+      if (element.size > 1000000) {
+        try {
+          Resizer.imageFileResizer(
+            element,
+            1000,
+            1000,
+            'JPEG',
+            100,
+            0,
+            uri => {
+              console.log(uri)
+              handleUpload([uri])
+            },
+            'file',
+            200,
+            200
+          )
+        } catch (err) {
+          showError(`${err} / Problema com as Fotos.`)
+          console.log(err)
+        } 
       } else handleUpload([element])
     })
   }, [])
