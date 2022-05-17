@@ -1,14 +1,21 @@
-import { getStorage, ref, uploadBytes } from 'firebase/storage'
-import useAuth from '../data/hook/useAuth'
+import { ref, uploadBytes } from 'firebase/storage'
+import { storage } from './config'
 
 export async function saveInFirebase(email: string, name: string, file: any) {
-  const storage = getStorage()
   // Child references can also take paths delimited by '/'
   const spaceRef = ref(storage, `${email}/${name}`)
   // spaceRef now points to "images/space.jpg"
   // imagesRef still points to "images"
-  await uploadBytes(spaceRef, file).then(snapshot => {
-    console.log('Uploaded a blob or file!')
-    console.log(snapshot)
-  })
+
+  try {
+    const snapshot = await uploadBytes(spaceRef, file)
+    const bucket = snapshot.metadata.bucket
+    const fullPath = snapshot.metadata.fullPath
+    const link = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(
+      fullPath
+    )}?alt=media`
+    return link
+  } catch (error) {
+    return console.log('Error', error)
+  }
 }

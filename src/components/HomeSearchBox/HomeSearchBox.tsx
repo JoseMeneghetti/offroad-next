@@ -2,10 +2,18 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import { HomeSearchBoxContainer } from '../../styles/components/HomeSearchBox'
 
-const HomeSearchBox: React.FC = () => {
-  const [selectedNavItem, setSelectedNavItem] = useState('moto')
-  const [searchBox, setSearchBox] = useState('')
+interface HomeSearchBoxProps {
+  search: string
+  setSearch: (search: string) => void
+  handleSearch: (e: any) => void
+}
 
+const HomeSearchBox: React.FC<HomeSearchBoxProps> = ({
+  search,
+  setSearch,
+  handleSearch
+}) => {
+  const [selectedNavItem, setSelectedNavItem] = useState('moto')
 
   return (
     <HomeSearchBoxContainer>
@@ -42,12 +50,12 @@ const HomeSearchBox: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Digite marca ou modelo do carro"
-                  value=""
-                  onChange={e => setSearchBox(e.target.value)}
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
                 />
               </div>
             </div>
-            <button>Ver Ofertas</button>
+            <button onClick={e => handleSearch(e)}>Ver Ofertas</button>
           </div>
         </div>
       </div>

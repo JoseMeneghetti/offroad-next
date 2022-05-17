@@ -35,8 +35,6 @@ const Pictures: React.FC<PicturesProps> = ({ setNewFiles, newFiles }) => {
     setNewFiles(result)
   }
 
-  console.log('=>', newFiles)
-
   return (
     <PicturesContainer>
       {error && (

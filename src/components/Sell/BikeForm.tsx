@@ -4,12 +4,16 @@ import { saveInFirebase } from '../../firebase/FirebaseStore'
 import { OptionBtnContainer } from '../../styles/components/OptionButton'
 import {
   BikeFormContainer,
+  BikeFormStepTitle,
   IsLoading
 } from '../../styles/components/Sell/BikeForm'
 import _ from 'lodash'
 import Pictures from './Pictures/Pictures'
 import SellInput from './SellInput'
-import { Spinner } from 'phosphor-react'
+import { Spinner, Warning } from 'phosphor-react'
+import useSWR from 'swr'
+import { useRouter } from 'next/router'
+import { ErroContainer } from '../../styles/pages/Login'
 
 const DEFAULT_BIKE = {
   brand: '',
@@ -21,7 +25,10 @@ const DEFAULT_BIKE = {
   describe: '',
   cep: '',
   city: '',
-  state: ''
+  state: '',
+  phone: '',
+  name: '',
+  userId: null
 }
 
 export type BikeFormType = {
@@ -35,6 +42,9 @@ export type BikeFormType = {
   cep: string
   city: string
   state: string
+  phone: string
+  name: string
+  userId: number
 }
 
 const BikeForm: React.FC = ({}) => {
@@ -42,18 +52,23 @@ const BikeForm: React.FC = ({}) => {
   const [step, setStep] = useState(0)
   const [newFiles, setNewFiles] = useState([])
   const [isLoading, setisLoading] = useState(false)
-  const [value, setValue] = useState(null)
   const [error, setError] = useState(null)
-
   const { user } = useAuth()
+  const fetcher = url => fetch(url).then(r => r.json())
 
+  const route = useRouter()
+
+  const { data: userPrismaData, error: userPrismaError } = useSWR(
+    `/api/user/find-all/${user.email}`,
+    fetcher
+  )
+    
   useEffect(() => {
-    if (bike.cep.length === 8) {
+    if (bike?.cep?.length === 8) {
       setisLoading(true)
       fetch(`https://viacep.com.br/ws/${bike.cep}/json/`)
         .then(async response => {
           const json = await response.json()
-          setValue(json)
           setBike({
             ...bike,
             city: json.localidade,
@@ -69,14 +84,58 @@ const BikeForm: React.FC = ({}) => {
     }
   }, [bike.cep])
 
-  console.log('==>', bike)
-  console.log(isLoading, value, error)
+  useEffect(() => {
+    if (userPrismaData?.id) {
+      setBike({
+        ...bike,
+        cep: userPrismaData.cep,
+        city: userPrismaData.city,
+        state: userPrismaData.state,
+        phone: userPrismaData.phone,
+        name: userPrismaData.name,
+        userId: userPrismaData.id
+      })
+    }
+  }, [userPrismaData])
 
-  function handleSubmit(e) {
+  function showError(msg, time = 5) {
+    setError(msg)
+    setTimeout(() => {
+      setError(null)
+    }, time * 1000)
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault()
-    newFiles.forEach(async element => {
-      await saveInFirebase(user.email, element.id, element.file)
-    })
+
+    const photos = await Promise.all(
+      newFiles.map(async element => {
+        return await saveInFirebase(user.email, element.id, element.file)
+      })
+    )
+
+    if (photos.length) {
+      setisLoading(true)
+      fetch(`/api/products/create `, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          bike: bike,
+          photos: photos
+        })
+      }).then(result => {
+        console.log('result', result)
+        if (result.status === 200) {
+          setisLoading(false)
+          route.push('/')
+        } else {
+          showError('Erro Com o banco de dados!')
+        }
+      })
+    }
   }
 
   function handleNext(e) {
@@ -93,7 +152,18 @@ const BikeForm: React.FC = ({}) => {
 
   return (
     <BikeFormContainer>
+      {error && (
+        <ErroContainer>
+          <>
+            <Warning size={24} />
+            <span>{error}</span>
+          </>
+        </ErroContainer>
+      )}
       <div className={`steps ${step === 0 && 'active'}`}>
+        <BikeFormStepTitle>
+          <span>Sobre sua Moto</span>
+        </BikeFormStepTitle>
         <SellInput
           type="text"
           label="Qual a Marca?"
@@ -126,6 +196,9 @@ const BikeForm: React.FC = ({}) => {
         </div>
       </div>
       <div className={`steps ${step === 1 && 'active'}`}>
+        <BikeFormStepTitle>
+          <span>Sobre sua Moto</span>
+        </BikeFormStepTitle>
         <SellInput
           type="text"
           label="Quantos KMs sua moto já rodou?"
@@ -140,17 +213,24 @@ const BikeForm: React.FC = ({}) => {
           value={bike}
           changeValue={setBike}
         />
+        <SellInput
+          type="text"
+          label="Faça uma brebe descrição sobre sua moto!"
+          name="describe"
+          value={bike}
+          changeValue={setBike}
+        />
       </div>
       <div className={`steps ${step === 2 && 'active'}`}>
-        <span>Coloque as melhores fotos de sua Moto </span>
+        <BikeFormStepTitle>
+          <span>Coloque as melhores fotos de sua Moto</span>
+        </BikeFormStepTitle>
         <Pictures newFiles={newFiles} setNewFiles={setNewFiles} />
       </div>
       <div className={`steps ${step === 3 && 'active'}`}>
-        {isLoading && (
-          <IsLoading>
-            <Spinner size={50} />
-          </IsLoading>
-        )}
+        <BikeFormStepTitle>
+          <span>Sobre sua Localização</span>
+        </BikeFormStepTitle>
         <SellInput
           type="text"
           label="Qual o seu CEP?"
@@ -160,15 +240,34 @@ const BikeForm: React.FC = ({}) => {
         />
         <SellInput
           type="text"
-          label="Que cidade está sua moto?"
+          label="Em que cidade está?"
           name="city"
           value={bike}
           changeValue={setBike}
         />
         <SellInput
           type="text"
-          label="Qual Estado está sua moto?"
+          label="Em que estado está?"
           name="state"
+          value={bike}
+          changeValue={setBike}
+        />
+      </div>
+      <div className={`steps ${step === 4 && 'active'}`}>
+        <BikeFormStepTitle>
+          <span>Sobre Você</span>
+        </BikeFormStepTitle>
+        <SellInput
+          type="text"
+          label="Qual o seu nome?"
+          name="name"
+          value={bike}
+          changeValue={setBike}
+        />
+        <SellInput
+          type="text"
+          label="Qual o seu Telefone?"
+          name="phone"
           value={bike}
           changeValue={setBike}
         />
@@ -181,9 +280,17 @@ const BikeForm: React.FC = ({}) => {
         >
           Voltar
         </button>
-        <button onClick={e => handleNext(e)}>Continuar</button>
+        {step === 4 ? (
+          <button onClick={e => handleSubmit(e)}> Anunciar</button>
+        ) : (
+          <button onClick={e => handleNext(e)}>Continuar</button>
+        )}
       </OptionBtnContainer>
-      {/* <button onClick={(e) => handleSubmit(e)}> Anunciar</button> */}
+      {isLoading && (
+        <IsLoading>
+          <Spinner size={50} />
+        </IsLoading>
+      )}
     </BikeFormContainer>
   )
 }

@@ -3,32 +3,76 @@ import {
   Image,
   ImageContainer,
   ProductSummaryContainer,
-  YearContainer,LocationContainer
+  YearContainer,
+  LocationContainer
 } from '../../styles/components/ProductSummary'
+import Slider from 'react-slick'
 
-const ProductSummary: React.FC = () => {
+interface ProductPhotos {
+  photo: string
+  id: number
+}
+
+interface ProductLocalization {
+  state: string
+  city: string
+}
+interface ProductSummaryProps {
+  photos: [ProductPhotos]
+  brand: string
+  km: string
+  model: string
+  price: string
+  user: ProductLocalization
+  yearF: string
+  yearM: string
+}
+
+const ProductSummary: React.FC<ProductSummaryProps> = ({
+  photos,
+  brand,
+  km,
+  model,
+  price,
+  user,
+  yearF,
+  yearM
+}) => {
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1
+  }
+
   return (
     <ProductSummaryContainer>
       <ImageContainer>
-        <Image
-          src="https://firebasestorage.googleapis.com/v0/b/offroad-market.appspot.com/o/product-1%2FIMG_1713.JPEG?alt=media&token=4231e849-5b70-4960-879b-bcd87f450438"
-          alt=""
-        />
+        <Slider {...settings}>
+          {photos?.map(element => (
+            <Image key={element.id} src={element.photo} alt="" />
+          ))}
+        </Slider>
       </ImageContainer>
       <div>
         <p>
-          <span>HONDA</span> - <span>CRF 250F</span>
+          <span>{brand}</span> - <span>{model}</span>
         </p>
       </div>
       <div>
-        <p style={{fontWeight: 700}}>R$ 24.000</p>
+        <p style={{ fontWeight: 700 }}>R$ {price}</p>
       </div>
       <YearContainer>
-        <span>2020/2021</span>
-        <span>1000 Horas</span>
+        <span>
+          {yearF}/{yearM}
+        </span>
+        <span>{km} Kms</span>
       </YearContainer>
       <LocationContainer>
-        <span>Atibaia - SP</span>
+        <span>
+          {user.city} - {user.state}
+        </span>
       </LocationContainer>
     </ProductSummaryContainer>
   )

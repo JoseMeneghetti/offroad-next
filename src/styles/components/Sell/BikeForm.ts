@@ -7,10 +7,6 @@ export const BikeFormContainer = styled.div`
 
   .steps {
     display: none;
-    span {
-      font-size: 1rem;
-      font-weight: 600;
-    }
   }
   .active {
     display: block;
@@ -55,5 +51,16 @@ export const IsLoading = styled.div`
     to {
       transform: rotate(360deg);
     }
+  }
+`
+export const BikeFormStepTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 2rem;
+  span {
+    font-size: 20px;
+    font-weight: 600;
   }
 `

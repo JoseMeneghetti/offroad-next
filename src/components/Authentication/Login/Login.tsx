@@ -1,4 +1,4 @@
-import { Warning } from 'phosphor-react'
+import { EnvelopeSimple, FacebookLogo, Warning } from 'phosphor-react'
 import React, { useState } from 'react'
 import useAuth from '../../../data/hook/useAuth'
 import { ErroContainer, LoginContainer } from '../../../styles/pages/Login'
@@ -10,7 +10,7 @@ const Login: React.FC = ({}) => {
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
 
-  const { login, register, loginGoogle } = useAuth()
+  const { login, register, loginGoogle, loginFacebook } = useAuth()
 
   function showError(msg, time = 5) {
     setError(msg)
@@ -26,9 +26,10 @@ const Login: React.FC = ({}) => {
       } else {
         await register(email, senha)
       }
-    } catch (e) {
-      console.log(e)
-      showError(e?.message ?? 'Erro Desconhecido!')
+    } catch (error) {
+      const errorCode = error.code
+      console.log(error)
+      showError(errorCode ?? 'Erro Desconhecido!')
     }
   }
 
@@ -72,7 +73,12 @@ const Login: React.FC = ({}) => {
         </button>
         <hr />
         <button className="btnGoogle" onClick={() => loginGoogle()}>
+          <EnvelopeSimple size={30} color="#ffffff" />
           Entrar com Google
+        </button>
+        <button className="btnFacebook" onClick={() => loginFacebook()}>
+          <FacebookLogo size={30} color="#ffffff" />
+          Entrar com Facebook
         </button>
         {mode === 'login' ? (
           <p>

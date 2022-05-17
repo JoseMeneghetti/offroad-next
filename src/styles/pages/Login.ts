@@ -64,6 +64,21 @@ export const LoginContainer = styled.div`
   }
   .btnGoogle {
     background-color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      margin-right: 0.5rem;
+    }
+  }
+  .btnFacebook {
+    background-color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      margin-right: 0.5rem;
+    }
   }
   hr {
     margin-top: 0.5rem;
