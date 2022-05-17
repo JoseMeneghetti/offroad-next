@@ -9,9 +9,9 @@ export default async function handle(
   res: NextApiResponse
 ) {
   const body = { ...req.body }
-
+  console.log(body)
   try {
-    const updateUser = await prisma.user.update({
+    await prisma.user.update({
       where: {
         id: body.bike.userId
       },
@@ -37,14 +37,16 @@ export default async function handle(
       }
     })
 
-    body.photos.forEach(async ele => {
-      const resultPhotos = await prisma.photos.create({
-        data: {
-          photo: ele,
-          productId: productResult.id
-        }
+    await Promise.all(
+      body.photos.forEach(async ele => {
+        await prisma.photos.create({
+          data: {
+            photo: ele,
+            productId: productResult.id
+          }
+        })
       })
-    })
+    )
 
     res.status(200).json('Sucesso!')
   } catch (error) {
