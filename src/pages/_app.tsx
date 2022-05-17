@@ -1,31 +1,38 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppProps } from 'next/app'
 import { ThemeContext } from '../data/context/ThemeContext'
 import { ThemeProvider } from 'styled-components'
 import { themeDark, themeLight } from '../styles/theme'
 import GlobalStyle from '../styles/global'
 import { AuthProvider } from '../data/context/AuthContext'
-
-type Theme = 'dark' | ''
+import Menu from '../components/Menu/Menu'
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
-  const [theme, setTheme] = useState<Theme>('dark')
+  const [theme, setTheme] = useState<string>('dark')
 
   function changeTheme() {
-    setTheme(theme === '' ? 'dark' : '')
+    const newTheme = theme === '' ? 'dark' : ''
+    setTheme(newTheme)
+    localStorage.setItem('theme', newTheme)
   }
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme')
+    setTheme(savedTheme)
+  }, [])
 
   return (
     <AuthProvider>
       <ThemeContext.Provider
         value={{
-          theme: theme,
+          theme,
           changeTheme
         }}
       >
         <ThemeProvider
           theme={theme && theme === 'dark' ? themeDark : themeLight}
         >
+          <Menu/>
           <Component {...pageProps} />
           <GlobalStyle />
         </ThemeProvider>

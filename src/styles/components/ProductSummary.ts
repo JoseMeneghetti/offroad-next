@@ -1,5 +1,8 @@
 import styled from 'styled-components'
 
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+
 export const ProductSummaryContainer = styled.div`
   width: 90%;
   display: flex;
@@ -10,13 +13,33 @@ export const ProductSummaryContainer = styled.div`
   padding: 0.5rem;
   margin: 1rem;
   @media (min-width: 769px) {
-    max-width: 300px;
+    max-width: 260px;
   }
 `
 
 export const ImageContainer = styled.div`
   width: 100%;
   height: 300px;
+  margin-bottom: 0.5rem;
+  div {
+    height: 100%;
+    max-height: 300px;
+  }
+  .slick-next, .slick-prev {
+    width: 30px;
+    height: 30px;
+    z-index: 1;
+    &::before{
+      font-size: 30px;
+    }
+  }
+
+  .slick-prev {
+    left: 0;
+  }
+  .slick-next {
+    right: 0;
+  }
 `
 
 export const Image = styled.img`

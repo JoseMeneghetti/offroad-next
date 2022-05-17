@@ -19,8 +19,18 @@ export const OptionBtnContainer = styled.div`
     padding: 1rem;
     cursor: pointer;
     outline: inherit;
+    opacity: 1;
     &:hover {
       background-color: ${props => props.theme.colors.hover};
+    }
+  }
+  .BtnVoltar {
+    background-color: transparent;
+    border: 1px solid ${props => props.theme.colors.primary};
+    color: ${props => props.theme.colors.primary};
+    &:hover {
+      color: #000;
+      border-color: #000;
     }
   }
 `

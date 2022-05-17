@@ -8,6 +8,9 @@ export const HomeSearchBoxContainer = styled.div`
   width: 100%;
   box-shadow: 0 8px 20px 0 rgb(158 184 209 / 43%);
   border-radius: 0.5rem;
+  @media (max-width: 769px) {
+    min-width: 100%;
+  }
   .NavBar--tabs {
     display: flex;
     justify-content: start;
@@ -49,6 +52,9 @@ export const HomeSearchBoxContainer = styled.div`
         background-repeat: no-repeat;
         background-position-y: center;
         background-size: 50px 30px;
+        @media (max-width: 769px) {
+          font-size: 12px;
+        }
       }
       button {
         font: inherit;
@@ -65,6 +71,9 @@ export const HomeSearchBoxContainer = styled.div`
         cursor: pointer;
         &:hover {
           background-color: ${props => props.theme.colors.hover};
+        }
+        @media (max-width: 769px) {
+          font-size: 14px;
         }
       }
     }
