@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { GooglePhotosLogo } from 'phosphor-react'
 const prisma = new PrismaClient()
 
 // POST /api/user
@@ -37,16 +38,13 @@ export default async function handle(
       }
     })
 
-    await Promise.all(
-      body.photos.forEach(async ele => {
-        await prisma.photos.create({
-          data: {
-            photo: ele,
-            productId: productResult.id
-          }
-        })
-      })
-    )
+    const photos = body.photos.reduce((acumulator, element: string) => {
+      return [...acumulator, { photo: element, productId: productResult.id }]
+    }, [])
+
+    await prisma.photos.createMany({
+      data: photos
+    })
 
     res.status(200).json('Sucesso!')
   } catch (error) {
