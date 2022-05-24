@@ -11,33 +11,34 @@ export const SellContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  form {
+`
+
+export const SellForms = styled.div`
+  height: auto;
+  width: 500px;
+  background-color: ${props => props.theme.colors.background};
+  opacity: 0.95;
+  border-radius: 0.5rem;
+  @media (max-width: 769px) {
+    width: 95%;
     height: auto;
-    width: 500px;
-    background-color: ${props => props.theme.colors.background};
-    opacity: 0.95;
-    border-radius: 0.5rem;
-    @media (max-width: 769px) {
-      width: 95%;
-      height: auto;
+  }
+  section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    h1 {
+      padding: 0 0.5rem;
+      font-weight: 500;
+      margin-right: 3%;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
     }
-    section {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 1rem;
-      h1 {
-        padding: 0 0.5rem;
-        font-weight: 500;
-        margin-right: 3%;
-        cursor: pointer;
-        border-bottom: 3px solid transparent;
-      }
-      .active {
-        font-weight: 600;
-        border-bottom-color: ${props => props.theme.colors.primary};
-        color: ${props => props.theme.colors.text};
-      }
+    .active {
+      font-weight: 600;
+      border-bottom-color: ${props => props.theme.colors.primary};
+      color: ${props => props.theme.colors.text};
     }
   }
 `

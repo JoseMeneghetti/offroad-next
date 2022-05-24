@@ -18,8 +18,7 @@ const MyDropzone: React.FC<MyDropzoneProps> = ({ handleUpload, setError }) => {
   const onDrop = useCallback(acceptedFiles => {
     // Do something with the files
     acceptedFiles.forEach(element => {
-      console.log(element.size)
-      if (element.size > 5000000) {
+      if (element.size > 2500000) {
         try {
           Resizer.imageFileResizer(
             element,

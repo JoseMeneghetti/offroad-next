@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { GooglePhotosLogo } from 'phosphor-react'
 const prisma = new PrismaClient()
 
 // POST /api/user
@@ -10,39 +9,36 @@ export default async function handle(
   res: NextApiResponse
 ) {
   const body = { ...req.body }
-  console.log(body)
   try {
     await prisma.user.update({
       where: {
-        id: body.bike.userId
+        id: body.equipment.userId
       },
       data: {
-        name: body.bike.name,
-        phone: body.bike.phone,
-        cep: body.bike.cep,
-        city: body.bike.city,
-        state: body.bike.state
+        name: body.equipment.name,
+        phone: body.equipment.phone,
+        cep: body.equipment.cep,
+        city: body.equipment.city,
+        state: body.equipment.state
       }
     })
 
-    const productResult = await prisma.product.create({
+    const productResult = await prisma.equipment.create({
       data: {
-        brand: body.bike.brand,
-        model: body.bike.model,
-        yearF: body.bike.yearF,
-        yearM: body.bike.yearM,
-        km: body.bike.km,
-        price: body.bike.price,
-        describe: body.bike.describe,
-        userId: body.bike.userId
+        brand: body.equipment.brand,
+        model: body.equipment.model,
+        type: body.equipment.type,
+        price: body.equipment.price,
+        describe: body.equipment.describe,
+        userId: body.equipment.userId
       }
     })
 
     const photos = body.photos.reduce((acumulator, element: string) => {
-      return [...acumulator, { photo: element, productId: productResult.id }]
+      return [...acumulator, { photo: element, equipmentId: productResult.id }]
     }, [])
 
-    await prisma.photos.createMany({
+    await prisma.equipmentPhotos.createMany({
       data: photos
     })
 

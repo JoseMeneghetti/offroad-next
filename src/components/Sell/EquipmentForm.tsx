@@ -14,16 +14,13 @@ import { Spinner, Warning } from 'phosphor-react'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { ErroContainer } from '../../styles/pages/Login'
-import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
-const DEFAULT_BIKE = {
+const DEFAULT_EQUIPMENT = {
   brand: '',
   model: '',
-  yearF: new Date().getFullYear().toString(),
-  yearM: new Date().getFullYear().toString(),
-  km: '',
+  type: '',
   price: '',
   describe: '',
   cep: '',
@@ -34,12 +31,10 @@ const DEFAULT_BIKE = {
   userId: null
 }
 
-export type BikeFormType = {
+export type EquipmentFormType = {
   brand: string
   model: string
-  yearF: string
-  yearM: string
-  km: string
+  type: string
   price: string
   describe: string
   cep: string
@@ -50,13 +45,12 @@ export type BikeFormType = {
   userId: number
 }
 
-const BikeForm: React.FC = ({}) => {
-  const [bike, setBike] = useState<BikeFormType>(DEFAULT_BIKE)
+const EquipmentForm: React.FC = ({}) => {
+  const [equipment, setEquipment] =
+    useState<EquipmentFormType>(DEFAULT_EQUIPMENT)
   const [step, setStep] = useState(0)
   const [newFiles, setNewFiles] = useState([])
   const [isLoading, setisLoading] = useState(false)
-  const [datepikerYearF, setDatepikerYearF] = useState(new Date())
-  const [datepikerYearM, setDatepikerYearM] = useState(new Date())
   const [error, setError] = useState(null)
   const { user } = useAuth()
   const fetcher = url => fetch(url).then(r => r.json())
@@ -69,13 +63,13 @@ const BikeForm: React.FC = ({}) => {
   )
 
   useEffect(() => {
-    if (bike?.cep?.length === 8) {
+    if (equipment?.cep?.length === 8) {
       setisLoading(true)
-      fetch(`https://viacep.com.br/ws/${bike.cep}/json/`)
+      fetch(`https://viacep.com.br/ws/${equipment.cep}/json/`)
         .then(async response => {
           const json = await response.json()
-          setBike({
-            ...bike,
+          setEquipment({
+            ...equipment,
             city: json.localidade,
             state: json.uf
           })
@@ -87,12 +81,12 @@ const BikeForm: React.FC = ({}) => {
           setisLoading(false)
         })
     }
-  }, [bike.cep])
+  }, [equipment.cep])
 
   useEffect(() => {
     if (userPrismaData?.id) {
-      setBike({
-        ...bike,
+      setEquipment({
+        ...equipment,
         cep: userPrismaData.cep,
         city: userPrismaData.city,
         state: userPrismaData.state,
@@ -111,8 +105,6 @@ const BikeForm: React.FC = ({}) => {
   }
 
   async function handleSubmit() {
-    setisLoading(true)
-
     const photos = await Promise.all(
       newFiles.map(async element => {
         return await saveInFirebase(user.email, element.id, element.file)
@@ -120,14 +112,15 @@ const BikeForm: React.FC = ({}) => {
     )
 
     if (photos.length) {
-      fetch(`/api/bike/create `, {
+      setisLoading(true)
+      fetch(`/api/equipment/create `, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          bike: bike,
+          equipment: equipment,
           photos: photos
         })
       }).then(result => {
@@ -135,7 +128,6 @@ const BikeForm: React.FC = ({}) => {
           setisLoading(false)
           route.push('/')
         } else {
-          setisLoading(false)
           showError('Erro Com o banco de dados!')
         }
       })
@@ -153,7 +145,6 @@ const BikeForm: React.FC = ({}) => {
     const newStep = step - 1
     setStep(newStep)
   }
-
   return (
     <SellFormContainer
       onSubmit={event => {
@@ -171,90 +162,58 @@ const BikeForm: React.FC = ({}) => {
       )}
       <div className={`steps ${step === 0 && 'active'}`}>
         <SellFormStepTitle>
-          <span>Sobre sua Moto</span>
+          <span>Sobre seu Equipamento</span>
         </SellFormStepTitle>
+        <SellInput
+          showError={showError}
+          type="text"
+          label="Qual o tipo do Equipamento?"
+          name="type"
+          value={equipment}
+          changeValue={setEquipment}
+        />
         <SellInput
           showError={showError}
           type="text"
           label="Qual a Marca?"
           name="brand"
-          value={bike}
-          changeValue={setBike}
+          value={equipment}
+          changeValue={setEquipment}
         />
         <SellInput
           showError={showError}
           type="text"
           label="Qual o Modelo?"
           name="model"
-          value={bike}
-          changeValue={setBike}
+          value={equipment}
+          changeValue={setEquipment}
         />
-
-        <div className="Years">
-          <div className="datescolumn">
-            <label>Ano de Fabricação</label>
-            <DatePicker
-              className="datepiker-input"
-              selected={datepikerYearF}
-              onChange={date => {
-                setDatepikerYearF(date)
-                setBike({ ...bike, yearF: date.getFullYear().toString() })
-              }}
-              showYearPicker
-              dateFormat="yyyy"
-              maxDate={new Date()}
-              minDate={new Date('1950-01-01T03:24:00')}
-            />
-          </div>
-          <div className="datescolumn">
-            <label>Ano do Modelo</label>
-            <DatePicker
-              className="datepiker-input"
-              selected={datepikerYearM}
-              onChange={date => {
-                setDatepikerYearM(date)
-                setBike({ ...bike, yearM: date.getFullYear().toString() })
-              }}
-              showYearPicker
-              dateFormat="yyyy"
-              maxDate={new Date()}
-              minDate={new Date('1950-01-01T03:24:00')}
-            />
-          </div>
-        </div>
       </div>
       <div className={`steps ${step === 1 && 'active'}`}>
         <SellFormStepTitle>
-          <span>Sobre sua Moto</span>
+          <span>Sobre seu Equipamento</span>
         </SellFormStepTitle>
         <SellInput
           showError={showError}
-          customProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
           type="number"
-          label="Quantos KMs sua moto já rodou?"
-          name="km"
-          value={bike}
-          changeValue={setBike}
-        />
-        <SellInput
-          showError={showError}
-          type="number"
-          customProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+          customProps={{ inputmode: 'numeric', pattern: '[0-9]*' }}
           label="Qual o Valor?"
           name="price"
-          value={bike}
-          changeValue={setBike}
+          value={equipment}
+          changeValue={setEquipment}
         />
         <label className="textarea-label">Descrição</label>
         <textarea
           className="textarea-input"
-          placeholder="Conte detalhes da sua moto"
-          onChange={event => setBike({ ...bike, describe: event.target.value })}
+          placeholder="Conte detalhes do seu equipamento"
+          onChange={event =>
+            setEquipment({ ...equipment, describe: event.target.value })
+          }
         />
       </div>
       <div className={`steps ${step === 2 && 'active'}`}>
         <SellFormStepTitle>
-          <span>Coloque as melhores fotos de sua Moto</span>
+          <span>Coloque as melhores fotos do seu equipamento</span>
         </SellFormStepTitle>
         <Pictures newFiles={newFiles} setNewFiles={setNewFiles} />
       </div>
@@ -267,24 +226,24 @@ const BikeForm: React.FC = ({}) => {
           type="text"
           label="Qual o seu CEP?"
           name="cep"
-          value={bike}
-          changeValue={setBike}
+          value={equipment}
+          changeValue={setEquipment}
         />
         <SellInput
           showError={showError}
           type="text"
           label="Em que cidade está?"
           name="city"
-          value={bike}
-          changeValue={setBike}
+          value={equipment}
+          changeValue={setEquipment}
         />
         <SellInput
           showError={showError}
           type="text"
           label="Em que estado está?"
           name="state"
-          value={bike}
-          changeValue={setBike}
+          value={equipment}
+          changeValue={setEquipment}
         />
       </div>
       <div className={`steps ${step === 4 && 'active'}`}>
@@ -296,16 +255,16 @@ const BikeForm: React.FC = ({}) => {
           type="text"
           label="Qual o seu nome?"
           name="name"
-          value={bike}
-          changeValue={setBike}
+          value={equipment}
+          changeValue={setEquipment}
         />
         <SellInput
           showError={showError}
           type="text"
           label="Qual o seu Telefone?"
           name="phone"
-          value={bike}
-          changeValue={setBike}
+          value={equipment}
+          changeValue={setEquipment}
         />
       </div>
       <OptionBtnContainer>
@@ -317,7 +276,7 @@ const BikeForm: React.FC = ({}) => {
           Voltar
         </button>
         {step === 4 ? (
-          <button>Anunciar</button>
+          <button> Anunciar</button>
         ) : (
           <button onClick={e => handleNext(e)}>Continuar</button>
         )}
@@ -331,4 +290,4 @@ const BikeForm: React.FC = ({}) => {
   )
 }
 
-export default BikeForm
+export default EquipmentForm

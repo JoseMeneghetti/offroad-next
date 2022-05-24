@@ -116,7 +116,6 @@ export const AuthProvider: React.FC<any> = ({ children }) => {
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         // const credential = FacebookAuthProvider.credentialFromResult(resp)
         // const accessToken = credential.accessToken
-        console.log(user)
         await sessionConfig(user)
 
         fetch(`/api/user/find/${user.email}`).then(response => {

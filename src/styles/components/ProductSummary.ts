@@ -12,8 +12,13 @@ export const ProductSummaryContainer = styled.div`
   border-radius: 0.5rem;
   padding: 0.5rem;
   margin: 1rem;
+  cursor: pointer;
   @media (min-width: 769px) {
-    max-width: 260px;
+    max-width: 250px;
+    margin: 1rem 0;
+  }
+  @media (min-width: 1024px) {
+    max-width: 275px;
   }
 `
 
@@ -25,11 +30,12 @@ export const ImageContainer = styled.div`
     height: 100%;
     max-height: 300px;
   }
-  .slick-next, .slick-prev {
+  .slick-next,
+  .slick-prev {
     width: 30px;
     height: 30px;
     z-index: 1;
-    &::before{
+    &::before {
       font-size: 30px;
     }
   }

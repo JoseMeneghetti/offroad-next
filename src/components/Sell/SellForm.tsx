@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
+import { SellForms } from '../../styles/pages/Sell'
 import BikeForm from './BikeForm'
-import EquipForm from './EquipForm'
+import EquipmentForm from './EquipmentForm'
 
 const SellForm: React.FC = ({}) => {
   const [selectedNavItem, setSelectedNavItem] = useState('moto')
 
   return (
-    <form>
+    <SellForms>
       <section>
         <h1
           className={`${selectedNavItem === 'moto' ? 'active ' : ''}`}
@@ -25,8 +26,8 @@ const SellForm: React.FC = ({}) => {
           Equipamentos
         </h1>
       </section>
-      {selectedNavItem === 'equip' ? <EquipForm /> : <BikeForm />}
-    </form>
+      {selectedNavItem === 'equip' ? <EquipmentForm /> : <BikeForm />}
+    </SellForms>
   )
 }
 

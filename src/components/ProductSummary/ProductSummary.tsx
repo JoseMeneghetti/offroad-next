@@ -6,72 +6,113 @@ import {
   YearContainer,
   LocationContainer
 } from '../../styles/components/ProductSummary'
-import Slider from 'react-slick'
 
+import Slider from 'react-slick'
+import { useRouter } from 'next/router'
 interface ProductPhotos {
   photo: string
   id: number
 }
-
 interface ProductLocalization {
   state: string
   city: string
 }
-interface ProductSummaryProps {
+export interface ProductSummaryBikeProps {
+  id: number
   photos: [ProductPhotos]
   brand: string
   km: string
   model: string
   price: string
   user: ProductLocalization
-  yearF: string
-  yearM: string
+  yearF?: string
+  yearM?: string
+  type?: string
 }
 
-const ProductSummary: React.FC<ProductSummaryProps> = ({
-  photos,
-  brand,
-  km,
-  model,
-  price,
-  user,
-  yearF,
-  yearM
+const ProductSummary: React.FC<ProductSummaryBikeProps | any> = ({
+  product
 }) => {
+  const route = useRouter()
+
+  function SampleNextArrow(props) {
+    const { className, style, onClick } = props
+    return (
+      <div
+        className={className}
+        style={{ ...style, display: 'block' }}
+        onClick={e => {
+          onClick()
+          e.stopPropagation()
+        }}
+      />
+    )
+  }
+
+  function SamplePrevArrow(props) {
+    const { className, style, onClick } = props
+    return (
+      <div
+        className={className}
+        style={{ ...style, display: 'block' }}
+        onClick={e => {
+          onClick()
+          e.stopPropagation()
+        }}
+      />
+    )
+  }
+
   const settings = {
     dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
-    slidesToScroll: 1
+    slidesToScroll: 1,
+    nextArrow: <SampleNextArrow props />,
+    prevArrow: <SamplePrevArrow props />
   }
 
   return (
-    <ProductSummaryContainer>
+    <ProductSummaryContainer
+      onClick={() =>
+        route.push(
+          product.type
+            ? `/product/equipment/${product?.id}`
+            : `/product/bike/${product?.id}`
+        )
+      }
+    >
       <ImageContainer>
         <Slider {...settings}>
-          {photos?.map(element => (
+          {product.photos?.map((element: ProductPhotos) => (
             <Image key={element.id} src={element.photo} alt="" />
           ))}
         </Slider>
       </ImageContainer>
       <div>
         <p>
-          <span>{brand}</span> - <span>{model}</span>
+          <span>{product.brand}</span> - <span>{product.model}</span>
         </p>
       </div>
       <div>
-        <p style={{ fontWeight: 700 }}>R$ {price}</p>
+        <p style={{ fontWeight: 700 }}>R$ {product.price}</p>
       </div>
       <YearContainer>
-        <span>
-          {yearF}/{yearM}
-        </span>
-        <span>{km} Kms</span>
+        {!product.type ? (
+          <>
+            <span>
+              {product.yearF}/{product.yearM}
+            </span>
+            <span>{product.km} Kms</span>
+          </>
+        ) : (
+          <span>{product.type}</span>
+        )}
       </YearContainer>
       <LocationContainer>
         <span>
-          {user.city} - {user.state}
+          {product.user?.city} - {product.user?.state}
         </span>
       </LocationContainer>
     </ProductSummaryContainer>

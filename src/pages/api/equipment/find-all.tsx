@@ -8,25 +8,7 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log(req?.query?.slug.toString())
-  
-  const products = await prisma.product.findMany({
-    where: {
-      OR: [
-        {
-          brand: {
-            contains: req?.query?.slug.toString(),
-            mode: 'insensitive',
-          }
-        },
-        {
-          model: {
-            contains: req?.query?.slug.toString(),
-            mode: 'insensitive',
-          }
-        }
-      ]
-    },
+  const products = await prisma.equipment.findMany({
     include: {
       photos: true,
       user: {
@@ -37,7 +19,6 @@ export default async function handle(
       }
     }
   })
-
   if (products.length) {
     res.status(200).json(products)
   } else {
