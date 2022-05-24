@@ -8,20 +8,28 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const products = await prisma.product.findMany({
+
+  const query = parseInt(req?.query?.slug.toString())
+
+  const product = await prisma.equipment.findUnique({
+    where: {
+      id: query
+    },
     include: {
       photos: true,
       user: {
         select: {
           state: true,
-          city: true
+          city: true,
+          phone: true,
+          name: true
         }
       }
     }
   })
 
-  if (products.length) {
-    res.status(200).json(products)
+  if (product.id) {
+    res.status(200).json(product)
   } else {
     res.status(400).json('Not Found')
   }

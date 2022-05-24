@@ -9,7 +9,9 @@ export const LoginContainer = styled.div`
   .form {
     margin: 0 3rem;
     width: 40%;
-
+    @media (max-width: 1025px) {
+      width: 50%;
+    }
     @media (max-width: 768px) {
       width: 100%;
     }

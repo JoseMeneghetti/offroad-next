@@ -4,16 +4,24 @@ import ProductSummary from '../components/ProductSummary/ProductSummary'
 import HomeSearchBox from '../components/HomeSearchBox/HomeSearchBox'
 import useSWR from 'swr'
 import { Catalog } from '../components/Skeleton/Catalog'
+import { ProductSummaryBikeProps } from '../components/ProductSummary/ProductSummary'
+import _ from 'lodash'
 
 const Home: React.FC = props => {
   const [search, setSearch] = useState('')
   const [searchResult, setSearchResult] = useState(undefined)
   const [result, setResult] = useState(undefined)
+  const [type, setType] = useState<'bike' | 'equipment'>('bike')
 
   const fetcher = url => fetch(url).then(r => r.json())
 
-  const { data: productsPrismaData, error: productsPrismaError } = useSWR(
-    `/api/products/find-all/`,
+  const { data: bikePrismaData, error: bikePrismaError } = useSWR(
+    `/api/bike/find-all/`,
+    fetcher
+  )
+
+  const { data: equipmentPrismaData, error: equipmentPrismaError } = useSWR(
+    `/api/equipment/find-all/`,
     fetcher
   )
 
@@ -29,26 +37,32 @@ const Home: React.FC = props => {
   }
 
   useEffect(() => {
+    if (type === 'bike') {
+      setResult(bikePrismaData)
+    } else if (type === 'equipment') {
+      setResult(equipmentPrismaData)
+    }
+  }, [type])
+
+  useEffect(() => {
     if (searchResult) {
       setResult(searchResult)
     } else {
-      setResult(productsPrismaData)
+      setResult(bikePrismaData)
     }
-  }, [searchResult, productsPrismaData])
+  }, [searchResult, bikePrismaData])
 
-  if (productsPrismaError) {
-    return <h1> ERRO 500...</h1>
-  }
-
-  console.log(result)
   return (
     <Container>
       <HomeSearchBox
         setSearch={setSearch}
         search={search}
         handleSearch={handleSearch}
+        setType={setType}
+        type={type}
       />
-      {!productsPrismaData && (
+      {bikePrismaError && <h1> ERRO 500...</h1>}
+      {!bikePrismaData && (
         <div
           style={{
             display: 'flex',
@@ -61,18 +75,8 @@ const Home: React.FC = props => {
         </div>
       )}
       <div className="content">
-        {result?.map(product => (
-          <ProductSummary
-            photos={product.photos}
-            brand={product.brand}
-            model={product.model}
-            km={product.km}
-            price={product.price}
-            user={product.user}
-            yearF={product.yearF}
-            yearM={product.yearM}
-            key={product.id}
-          />
+        {result?.map((product: ProductSummaryBikeProps) => (
+          <ProductSummary key={_.uniqueId()} product={product} />
         ))}
       </div>
     </Container>

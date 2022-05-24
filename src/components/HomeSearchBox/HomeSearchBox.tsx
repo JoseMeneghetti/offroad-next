@@ -1,39 +1,37 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React from 'react'
 import { HomeSearchBoxContainer } from '../../styles/components/HomeSearchBox'
 
 interface HomeSearchBoxProps {
   search: string
   setSearch: (search: string) => void
   handleSearch: (e: any) => void
+  setType: (type: 'bike' | 'equipment') => void
+  type: string
 }
 
 const HomeSearchBox: React.FC<HomeSearchBoxProps> = ({
   search,
   setSearch,
-  handleSearch
+  handleSearch,
+  setType,
+  type
 }) => {
-  const [selectedNavItem, setSelectedNavItem] = useState('moto')
-
   return (
     <HomeSearchBoxContainer>
       <div className="NavBar--tabs">
         <h2
-          className={`NavBar--item ${
-            selectedNavItem === 'moto' ? 'active ' : ''
-          }`}
+          className={`NavBar--item ${type === 'bike' ? 'active ' : ''}`}
           onClick={() => {
-            setSelectedNavItem('moto')
+            setType('bike')
           }}
         >
           Comprar Motos
         </h2>
         <h2
-          className={`NavBar--item ${
-            selectedNavItem === 'equip' ? 'active ' : ''
-          }`}
+          className={`NavBar--item ${type === 'equipment' ? 'active ' : ''}`}
           onClick={() => {
-            setSelectedNavItem('equip')
+            setType('equipment')
           }}
         >
           Comprar Equipamentos
