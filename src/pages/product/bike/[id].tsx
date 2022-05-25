@@ -67,10 +67,6 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   try {
     const product: BikeProduct = await getBikeProducts(parseInt(params.id))
-    if (!product) {
-      fetch(`${getBaseUrl()}/api/revalidate?secret=josebonito&path=${params.id}}
-      `)
-    }
     return {
       props: {
         product
