@@ -33,8 +33,8 @@ export interface BikeProduct {
   model: string
   yearF: string
   yearM: string
-  km: string
-  hours: string
+  km?: string
+  hours?: string
   price: string
   describe: string
   userId: number
