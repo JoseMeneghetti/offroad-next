@@ -150,9 +150,7 @@ const BikeForm: React.FC = ({}) => {
             process.env.NEXT_PUBLIC_MY_SECRET_TOKEN
           }&path=/}
           `)
-          console.log('revalidate',revalidate)
           setisLoading(false)
-
           route.push('/')
         } else {
           setisLoading(false)
@@ -286,7 +284,7 @@ const BikeForm: React.FC = ({}) => {
               customProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
               type="number"
               label="Quantos Horas sua moto possui?"
-              name="km"
+              name='hours'
               value={bike}
               changeValue={setBike}
             />

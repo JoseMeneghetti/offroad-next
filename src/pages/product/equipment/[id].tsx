@@ -56,7 +56,7 @@ export async function getStaticPaths() {
 
     return {
       paths,
-      fallback: false
+      fallback: true
     }
   } catch (error) {
     throw new Error(error)

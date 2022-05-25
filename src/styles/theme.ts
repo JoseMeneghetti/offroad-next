@@ -16,7 +16,7 @@ export const themeLight = {
     background_2: '#F4F4F4',
     text: '#2C2738',
     primary: '#fd5601',
-    secundary: '#fdfbbf',
+    secundary: '#4515ac',
     tertiary: '#fb8afc',
     quaternary: '#4515ac',
     hover: '#F2811D'

@@ -16,8 +16,8 @@ export async function getStaticProps() {
       props: {
         bikePrismaData
       },
-      revalidate: (60 * 10)
-    } 
+      revalidate: 60 * 10
+    }
   } catch (error) {
     throw new Error(error)
   }
@@ -41,9 +41,19 @@ const Home: React.FC = (
   function handleSearch(e: any) {
     e.preventDefault()
     if (search) {
-      fetch(`/api/products/find/${search}`).then(async response => {
-        setSearchResult(await response.json())
-      })
+      if (type === 'bike') {
+        fetch(`/api/bike/find/${search}`).then(async response => {
+          if (response.status === 400) alert('nenhum resultado encontrado')
+          const result = await response.json()
+          setSearchResult(result)
+        })
+      } else if (type === 'equipment') {
+        fetch(`/api/equipment/find/${search}`).then(async response => {
+          if (response.status === 400) alert('nenhum resultado encontrado')
+          const result = await response.json()
+          setSearchResult(result)
+        })
+      }
     } else {
       setSearchResult(undefined)
     }

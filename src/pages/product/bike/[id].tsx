@@ -206,10 +206,17 @@ const BikeProductPage: React.FC = (
                       label={'Ano de Fabricação'}
                       text={product.yearF}
                     />
-                    <SimpleDescription
-                      label={'KMs rodados'}
-                      text={product.km}
-                    />
+                    {product.hours ? (
+                      <SimpleDescription
+                        label={'Tempo de Uso'}
+                        text={`${product.hours} Horas`}
+                      />
+                    ) : (
+                      <SimpleDescription
+                        label={'Kilometragem'}
+                        text={`${product.km} Kms`}
+                      />
+                    )}
                   </div>
                   <div className="row-2">
                     <SimpleDescription
