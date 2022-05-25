@@ -17,6 +17,7 @@ import { ErroContainer } from '../../styles/pages/Login'
 import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
+import { getBaseUrl } from '../../utils/selectEnviroment'
 
 const DEFAULT_BIKE = {
   brand: '',
@@ -111,7 +112,7 @@ const BikeForm: React.FC = ({}) => {
       setBike({
         ...bike,
         km: '',
-        hours: '',
+        hours: ''
       })
     }
   }, [radio])
@@ -143,9 +144,15 @@ const BikeForm: React.FC = ({}) => {
           bike: bike,
           photos: photos
         })
-      }).then(result => {
+      }).then(async result => {
         if (result.status === 200) {
+          const revalidate = await fetch(`${getBaseUrl()}/api/revalidate?secret=${
+            process.env.NEXT_PUBLIC_MY_SECRET_TOKEN
+          }&path=/}
+          `)
+          console.log('revalidate',revalidate)
           setisLoading(false)
+
           route.push('/')
         } else {
           setisLoading(false)

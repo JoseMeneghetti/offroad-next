@@ -6,14 +6,14 @@ export default async function handler(
   ) {
   // Check for secret to confirm this is a valid request
 
-  const path = req.query.path
-  
-  if (req.query.secret !== process.env.MY_SECRET_TOKEN) {
+  const path = req.query.path.toString()
+
+  if (req.query.secret !== process.env.NEXT_PUBLIC_MY_SECRET_TOKEN) {
     return res.status(401).json({ message: 'Invalid token' })
   }
 
   try {
-    await res.unstable_revalidate('/')
+    await res.unstable_revalidate(path)
     return res.json({ revalidated: true })
   } catch (err) {
     // If there was an error, Next.js will continue
