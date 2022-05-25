@@ -59,11 +59,20 @@ export const SellFormContainer = styled.form`
     color: ${props => props?.theme?.colors?.text};
     background-color: transparent;
     border-radius: 0.5rem;
-    min-height: 250px;
+    min-height: 200px;
     padding: 0.5rem 0.5rem;
     resize: none;
     @media (max-width: 769px) {
       min-height: 115px;
+    }
+  }
+  .radioContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    input{
+      accent-color: ${props => props?.theme?.colors?.primary};
+      margin-right: 5px;
     }
   }
 `

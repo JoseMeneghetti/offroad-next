@@ -6,19 +6,32 @@ import useSWR from 'swr'
 import { Catalog } from '../components/Skeleton/Catalog'
 import { ProductSummaryBikeProps } from '../components/ProductSummary/ProductSummary'
 import _ from 'lodash'
+import { getAllBikesHome } from '../data/next/sell-page'
+import { InferGetStaticPropsType } from 'next'
 
-const Home: React.FC = props => {
+export async function getStaticProps() {
+  try {
+    const bikePrismaData: any = await getAllBikesHome()
+    return {
+      props: {
+        bikePrismaData
+      },
+      revalidate: (60 * 10)
+    } 
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+const Home: React.FC = (
+  props: InferGetStaticPropsType<typeof getStaticProps>
+) => {
   const [search, setSearch] = useState('')
   const [searchResult, setSearchResult] = useState(undefined)
   const [result, setResult] = useState(undefined)
   const [type, setType] = useState<'bike' | 'equipment'>('bike')
 
   const fetcher = url => fetch(url).then(r => r.json())
-
-  const { data: bikePrismaData, error: bikePrismaError } = useSWR(
-    `/api/bike/find-all/`,
-    fetcher
-  )
 
   const { data: equipmentPrismaData, error: equipmentPrismaError } = useSWR(
     `/api/equipment/find-all/`,
@@ -38,7 +51,7 @@ const Home: React.FC = props => {
 
   useEffect(() => {
     if (type === 'bike') {
-      setResult(bikePrismaData)
+      setResult(props?.bikePrismaData)
     } else if (type === 'equipment') {
       setResult(equipmentPrismaData)
     }
@@ -48,9 +61,9 @@ const Home: React.FC = props => {
     if (searchResult) {
       setResult(searchResult)
     } else {
-      setResult(bikePrismaData)
+      setResult(props?.bikePrismaData)
     }
-  }, [searchResult, bikePrismaData])
+  }, [searchResult, props?.bikePrismaData])
 
   return (
     <Container>
@@ -61,8 +74,7 @@ const Home: React.FC = props => {
         setType={setType}
         type={type}
       />
-      {bikePrismaError && <h1> ERRO 500...</h1>}
-      {!bikePrismaData && (
+      {!props.bikePrismaData && (
         <div
           style={{
             display: 'flex',

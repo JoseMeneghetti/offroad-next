@@ -13,6 +13,7 @@ import { WhatsappLogo } from 'phosphor-react'
 import ImageViewer from 'react-simple-image-viewer'
 import { isMobile } from 'react-device-detect'
 import { getBikeIds, getBikeProducts } from '../../../data/next/sell-page'
+import { getBaseUrl } from '../../../utils/selectEnviroment'
 
 export interface Photo {
   id: number
@@ -33,6 +34,7 @@ export interface BikeProduct {
   yearF: string
   yearM: string
   km: string
+  hours: string
   price: string
   describe: string
   userId: number
@@ -55,7 +57,7 @@ export async function getStaticPaths() {
 
     return {
       paths,
-      fallback: false
+      fallback: true
     }
   } catch (error) {
     throw new Error(error)
@@ -65,6 +67,10 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   try {
     const product: BikeProduct = await getBikeProducts(parseInt(params.id))
+    if (!product) {
+      fetch(`${getBaseUrl()}/api/revalidate?secret=josebonito&path=${params.id}}
+      `)
+    }
     return {
       props: {
         product

@@ -58,6 +58,7 @@ export async function getBikeProducts(query: number) {
       id: true,
       createdAt: false,
       km: true,
+      hours: true,
       model: true,
       price: true,
       userId: true,
@@ -103,4 +104,32 @@ export async function getEquipmentProducts(query: number) {
     }
   })
   return product
+}
+
+export async function getAllBikesHome() {
+  const products = await prisma.bike.findMany({
+    select: {
+      brand: true,
+      describe: true,
+      id: true,
+      createdAt: false,
+      km: true,
+      hours: true,
+      model: true,
+      price: true,
+      userId: true,
+      yearF: true,
+      yearM: true,
+      photos: true,
+      user: {
+        select: {
+          state: true,
+          city: true,
+          phone: true,
+          name: true
+        }
+      }
+    }
+  })
+  return products
 }
