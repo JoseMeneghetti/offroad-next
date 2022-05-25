@@ -29,7 +29,8 @@ model Bike {
   model     String
   yearF     String
   yearM     String
-  km        String
+  km        String?
+  hours     String?
   price     String
   describe  String?
   user      User         @relation(fields: [userId], references: [id])

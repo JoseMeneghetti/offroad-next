@@ -21,7 +21,8 @@ export interface ProductSummaryBikeProps {
   id: number
   photos: [ProductPhotos]
   brand: string
-  km: string
+  km?: string
+  hours?: string
   model: string
   price: string
   user: ProductLocalization
@@ -104,7 +105,11 @@ const ProductSummary: React.FC<ProductSummaryBikeProps | any> = ({
             <span>
               {product.yearF}/{product.yearM}
             </span>
-            <span>{product.km} Kms</span>
+            {product.hours ? (
+              <span>{product.hours} Horas</span>
+            ) : (
+              <span>{product.km} Kms</span>
+            )}
           </>
         ) : (
           <span>{product.type}</span>

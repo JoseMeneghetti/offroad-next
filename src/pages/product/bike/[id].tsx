@@ -13,6 +13,7 @@ import { WhatsappLogo } from 'phosphor-react'
 import ImageViewer from 'react-simple-image-viewer'
 import { isMobile } from 'react-device-detect'
 import { getBikeIds, getBikeProducts } from '../../../data/next/sell-page'
+import { getBaseUrl } from '../../../utils/selectEnviroment'
 
 export interface Photo {
   id: number
@@ -32,7 +33,8 @@ export interface BikeProduct {
   model: string
   yearF: string
   yearM: string
-  km: string
+  km?: string
+  hours?: string
   price: string
   describe: string
   userId: number
@@ -55,7 +57,7 @@ export async function getStaticPaths() {
 
     return {
       paths,
-      fallback: false
+      fallback: true
     }
   } catch (error) {
     throw new Error(error)
@@ -204,10 +206,17 @@ const BikeProductPage: React.FC = (
                       label={'Ano de Fabricação'}
                       text={product.yearF}
                     />
-                    <SimpleDescription
-                      label={'KMs rodados'}
-                      text={product.km}
-                    />
+                    {product.hours ? (
+                      <SimpleDescription
+                        label={'Tempo de Uso'}
+                        text={`${product.hours} Horas`}
+                      />
+                    ) : (
+                      <SimpleDescription
+                        label={'Kilometragem'}
+                        text={`${product.km} Kms`}
+                      />
+                    )}
                   </div>
                   <div className="row-2">
                     <SimpleDescription
