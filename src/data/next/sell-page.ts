@@ -114,7 +114,7 @@ export async function getAllBikesHome() {
       id: true,
       createdAt: false,
       km: true,
-      hours: true,
+      /* hours: true, */
       model: true,
       price: true,
       userId: true,
