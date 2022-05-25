@@ -15,6 +15,7 @@ export default async function handle(
       describe: false,
       id: true,
       km: false,
+      hours: false,
       model: false,
       photos: false,
       price: false,

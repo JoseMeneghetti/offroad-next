@@ -31,6 +31,7 @@ export default async function handle(
         yearF: body.bike.yearF,
         yearM: body.bike.yearM,
         km: body.bike.km,
+        hours: body.bike.hours,
         price: body.bike.price,
         describe: body.bike.describe,
         userId: body.bike.userId

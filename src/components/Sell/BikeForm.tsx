@@ -17,6 +17,7 @@ import { ErroContainer } from '../../styles/pages/Login'
 import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
+import { getBaseUrl } from '../../utils/selectEnviroment'
 
 const DEFAULT_BIKE = {
   brand: '',
@@ -24,6 +25,7 @@ const DEFAULT_BIKE = {
   yearF: new Date().getFullYear().toString(),
   yearM: new Date().getFullYear().toString(),
   km: '',
+  hours: '',
   price: '',
   describe: '',
   cep: '',
@@ -40,6 +42,7 @@ export type BikeFormType = {
   yearF: string
   yearM: string
   km: string
+  hours: string
   price: string
   describe: string
   cep: string
@@ -57,6 +60,7 @@ const BikeForm: React.FC = ({}) => {
   const [isLoading, setisLoading] = useState(false)
   const [datepikerYearF, setDatepikerYearF] = useState(new Date())
   const [datepikerYearM, setDatepikerYearM] = useState(new Date())
+  const [radio, setRadio] = useState('km')
   const [error, setError] = useState(null)
   const { user } = useAuth()
   const fetcher = url => fetch(url).then(r => r.json())
@@ -103,6 +107,16 @@ const BikeForm: React.FC = ({}) => {
     }
   }, [userPrismaData])
 
+  useEffect(() => {
+    if (radio) {
+      setBike({
+        ...bike,
+        km: '',
+        hours: ''
+      })
+    }
+  }, [radio])
+
   function showError(msg, time = 5) {
     setError(msg)
     setTimeout(() => {
@@ -130,8 +144,12 @@ const BikeForm: React.FC = ({}) => {
           bike: bike,
           photos: photos
         })
-      }).then(result => {
+      }).then(async result => {
         if (result.status === 200) {
+          const revalidate = await fetch(`${getBaseUrl()}/api/revalidate?secret=${
+            process.env.NEXT_PUBLIC_MY_SECRET_TOKEN
+          }&path=/}
+          `)
           setisLoading(false)
           route.push('/')
         } else {
@@ -153,6 +171,8 @@ const BikeForm: React.FC = ({}) => {
     const newStep = step - 1
     setStep(newStep)
   }
+
+  console.log(radio)
 
   return (
     <SellFormContainer
@@ -227,15 +247,50 @@ const BikeForm: React.FC = ({}) => {
         <SellFormStepTitle>
           <span>Sobre sua Moto</span>
         </SellFormStepTitle>
-        <SellInput
-          showError={showError}
-          customProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-          type="number"
-          label="Quantos KMs sua moto já rodou?"
-          name="km"
-          value={bike}
-          changeValue={setBike}
-        />
+        <div className="radioContainer">
+          <label>
+            <input
+              type="radio"
+              value="km"
+              name="km"
+              checked={radio === 'km'}
+              onChange={() => setRadio('km')}
+            ></input>
+            KM
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="hours"
+              name="hours"
+              checked={radio === 'hours'}
+              onChange={() => setRadio('hours')}
+            ></input>
+            Horas
+          </label>
+          {radio === 'km' ? (
+            <SellInput
+              showError={showError}
+              customProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+              type="number"
+              label="Quantos KMs sua moto já rodou?"
+              name="km"
+              value={bike}
+              changeValue={setBike}
+            />
+          ) : (
+            <SellInput
+              showError={showError}
+              customProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+              type="number"
+              label="Quantos Horas sua moto possui?"
+              name='hours'
+              value={bike}
+              changeValue={setBike}
+            />
+          )}
+        </div>
+
         <SellInput
           showError={showError}
           type="number"
