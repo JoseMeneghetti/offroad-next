@@ -7,8 +7,9 @@ export const Container = styled.div`
     padding: 0 1rem;
     display: flex;
     flex-wrap: wrap;
-    @media (min-width: 768px) {
-      justify-content: space-around;
+    justify-content: space-around;
+    @media (min-width: 1024px) {
+      padding: 0 3rem;
     }
   }
 `

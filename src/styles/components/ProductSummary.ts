@@ -4,31 +4,28 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
 export const ProductSummaryContainer = styled.div`
-  width: 90%;
+  width: 100%;
   display: flex;
   align-items: start;
   flex-direction: column;
   border: 1px solid ${props => props.theme.colors.text};
   border-radius: 0.5rem;
   padding: 0.5rem;
-  margin: 1rem;
+  margin: 1rem 0 ;
   cursor: pointer;
-  @media (min-width: 769px) {
-    max-width: 250px;
-    margin: 1rem 0;
-  }
-  @media (min-width: 1024px) {
-    max-width: 275px;
+  max-width: 250px;
+  @media (max-width: 550px) {
+    max-width: 100%;
   }
 `
 
 export const ImageContainer = styled.div`
   width: 100%;
-  height: 300px;
+  height: 275px;
   margin-bottom: 0.5rem;
   div {
     height: 100%;
-    max-height: 300px;
+    max-height: 275px;
   }
   .slick-next,
   .slick-prev {
