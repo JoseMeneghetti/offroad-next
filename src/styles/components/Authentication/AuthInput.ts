@@ -8,5 +8,6 @@ export const AuthInputContainer = styled.div`
     padding: 10px 8px;
     border-radius: 0.5rem;
     background-color: ${props => props?.theme?.colors?.text};
+    color: ${props => props?.theme?.colors?.background};
   }
 `
