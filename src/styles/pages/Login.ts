@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const LoginContainer = styled.div`
   width: inherit;
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +37,7 @@ export const LoginContainer = styled.div`
       display: none;
     }
     img {
-      height: 99vh;
+      height: 100%;
       width: 100%;
       object-fit: cover;
     }
