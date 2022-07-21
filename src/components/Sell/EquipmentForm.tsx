@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import useAuth from '../../data/hook/useAuth'
 import { saveInFirebase } from '../../firebase/FirebaseStore'
 import { OptionBtnContainer } from '../../styles/components/OptionButton'
@@ -16,6 +16,7 @@ import { useRouter } from 'next/router'
 import { ErroContainer } from '../../styles/pages/Login'
 
 import 'react-datepicker/dist/react-datepicker.css'
+import { getBaseUrl } from '../../utils/selectEnviroment'
 
 const DEFAULT_EQUIPMENT = {
   brand: '',
@@ -83,7 +84,7 @@ const EquipmentForm: React.FC = ({}) => {
     }
   }, [equipment.cep])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (userPrismaData?.id) {
       setEquipment({
         ...equipment,
@@ -123,11 +124,17 @@ const EquipmentForm: React.FC = ({}) => {
           equipment: equipment,
           photos: photos
         })
-      }).then(result => {
+      }).then(async result => {
         if (result.status === 200) {
+          const revalidate =
+            await fetch(`${getBaseUrl()}/api/revalidate?secret=${
+              process.env.NEXT_PUBLIC_MY_SECRET_TOKEN
+            }&path=/}
+            `)
           setisLoading(false)
           route.push('/')
         } else {
+          setisLoading(false)
           showError('Erro Com o banco de dados!')
         }
       })

@@ -1,16 +1,21 @@
-import { Phone } from 'phosphor-react'
+import { Pencil, Phone } from 'phosphor-react'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import ForceLoading from '../components/Authentication/ForceLoading'
 import ProfileInput from '../components/Profile/ProfileInput'
 import useAuth from '../data/hook/useAuth'
-import { ProfileForm } from '../styles/components/Profile/ProfileInput'
+import {
+  ProfileForm,
+  ProfileHeader
+} from '../styles/components/Profile/ProfileInput'
 import { LoginContainer } from '../styles/pages/Login'
+import { useRouter } from 'next/router'
 
 const Profile: React.FC = ({}) => {
   const { logout, user } = useAuth()
 
   const fetcher = url => fetch(url).then(r => r.json())
+  const route = useRouter()
 
   const { data, error } = useSWR(`/api/user/find-all/${user?.email}`, fetcher)
 
@@ -23,6 +28,27 @@ const Profile: React.FC = ({}) => {
     city: '',
     state: ''
   })
+
+  function handleSubmit() {
+    fetch(`/api/user/update `, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        profile
+      })
+    }).then(async result => {
+      if (result.status === 200) {
+        // setisLoading(false)
+        route.push('/profile')
+      } else {
+        console.log(result)
+        // setisLoading(false)
+      }
+    })
+  }
 
   useEffect(() => {
     if (profile?.cep?.length === 8) {
@@ -55,16 +81,27 @@ const Profile: React.FC = ({}) => {
           />
         </div>
         <div className="form">
-          <ProfileForm>
-            <ProfileInput
-              /* showError={showError} */
-              type="text"
-              label="email"
-              name="email"
-              value={profile}
-              changeValue={setProfile}
-              disabled
-            />
+          <ProfileForm
+            onSubmit={e => {
+              e.preventDefault()
+              e.stopPropagation()
+              handleSubmit()
+            }}
+          >
+            <ProfileHeader>
+              <div className="image-container">
+                {user?.imagemUrl ? (
+                  <img
+                    src={user?.imagemUrl}
+                    alt="Avatar do Usuário"
+                    className="avatar"
+                  />
+                ) : (
+                  <div>{profile?.name && profile?.name[0]?.toUpperCase()}</div>
+                )}
+              </div>
+              <span>{profile?.email}</span>
+            </ProfileHeader>
             <ProfileInput
               type="text"
               label="name"
@@ -104,6 +141,9 @@ const Profile: React.FC = ({}) => {
                 changeValue={setProfile}
               />
             </div>
+            <button type="submit">
+              <Pencil size={25} /> Editar
+            </button>
           </ProfileForm>
           <button onClick={logout}> SAIR </button>
         </div>

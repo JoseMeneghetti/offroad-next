@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { GooglePhotosLogo } from 'phosphor-react'
 const prisma = new PrismaClient()
 
 // POST /api/user
@@ -39,9 +38,12 @@ export default async function handle(
     })
 
     const photos = body.photos.reduce((acumulator, element: string) => {
-      return [...acumulator, { photo: element, bikeId: productResult.id }]
+      return [
+        ...acumulator,
+        { photo: element[0], path: element[1], bikeId: productResult.id }
+      ]
     }, [])
-
+    console.log(photos)
     await prisma.bikePhotos.createMany({
       data: photos
     })

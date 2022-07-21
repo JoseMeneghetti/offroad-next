@@ -19,7 +19,8 @@ CREATE TABLE "Bike" (
     "model" TEXT NOT NULL,
     "yearF" TEXT NOT NULL,
     "yearM" TEXT NOT NULL,
-    "km" TEXT NOT NULL,
+    "km" TEXT,
+    "hours" TEXT,
     "price" TEXT NOT NULL,
     "describe" TEXT,
     "userId" INTEGER NOT NULL,
@@ -31,6 +32,7 @@ CREATE TABLE "Bike" (
 CREATE TABLE "BikePhotos" (
     "id" SERIAL NOT NULL,
     "photo" TEXT NOT NULL,
+    "path" TEXT NOT NULL,
     "bikeId" INTEGER NOT NULL,
 
     CONSTRAINT "BikePhotos_pkey" PRIMARY KEY ("id")
@@ -54,6 +56,7 @@ CREATE TABLE "Equipment" (
 CREATE TABLE "EquipmentPhotos" (
     "id" SERIAL NOT NULL,
     "photo" TEXT NOT NULL,
+    "path" TEXT NOT NULL,
     "equipmentId" INTEGER NOT NULL,
 
     CONSTRAINT "EquipmentPhotos_pkey" PRIMARY KEY ("id")
