@@ -13,8 +13,7 @@ import { WhatsappLogo } from 'phosphor-react'
 import ImageViewer from 'react-simple-image-viewer'
 import { isMobile } from 'react-device-detect'
 import { getBikeIds, getBikeProducts } from '../../../data/next/sell-page'
-import { getBaseUrl } from '../../../utils/selectEnviroment'
-
+ 
 export interface Photo {
   id: number
   photo: string
