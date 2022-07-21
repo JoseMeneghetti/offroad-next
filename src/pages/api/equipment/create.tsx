@@ -35,7 +35,7 @@ export default async function handle(
     })
 
     const photos = body.photos.reduce((acumulator, element: string) => {
-      return [...acumulator, { photo: element, equipmentId: productResult.id }]
+      return [...acumulator, { photo: element[0], path: element[1], equipmentId: productResult.id }]
     }, [])
 
     await prisma.equipmentPhotos.createMany({

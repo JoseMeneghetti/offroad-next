@@ -13,8 +13,7 @@ import { WhatsappLogo } from 'phosphor-react'
 import ImageViewer from 'react-simple-image-viewer'
 import { isMobile } from 'react-device-detect'
 import { getBikeIds, getBikeProducts } from '../../../data/next/sell-page'
-import { getBaseUrl } from '../../../utils/selectEnviroment'
-
+ 
 export interface Photo {
   id: number
   photo: string
@@ -106,6 +105,7 @@ const BikeProductPage: React.FC = (
     setIsViewerOpen(false)
   }
 
+  function whatsAppLink(phone: string) {}
   const SimpleDescription: React.FC<SimpleDescriptionProps> = ({
     label,
     text,
@@ -254,14 +254,12 @@ const BikeProductPage: React.FC = (
                         text={product.user.phone}
                         className={'right'}
                       />
-
-                      <WhatsappLogo
-                        size={32}
-                        color="#22c016"
-                        onClick={() => {
-                          console.log('zipzop')
-                        }}
-                      />
+                      <a href={`https://wa.me/55${product.user.phone}`} target="_blank">
+                        <WhatsappLogo
+                          size={32}
+                          color="#22c016"
+                        />
+                      </a>
                     </div>
                   </div>
                 </RightDescriptionContainer>

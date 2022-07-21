@@ -149,13 +149,12 @@ const EquipmentProductPage: React.FC = (
                       parseInt(product.price)
                     )}
                   </span>{' '}
-                  <WhatsappLogo
-                    size={32}
-                    color="#22c016"
-                    onClick={() => {
-                      console.log('zipzop')
-                    }}
-                  />
+                  <a
+                    href={`https://wa.me/55${product.user.phone}`}
+                    target="_blank"
+                  >
+                    <WhatsappLogo size={32} color="#22c016" />
+                  </a>
                 </div>
                 <div className="seller-mobile-info">
                   <SimpleDescription

@@ -1,4 +1,4 @@
-import { ref, uploadBytes } from 'firebase/storage'
+import { deleteObject, ref, uploadBytes } from 'firebase/storage'
 import { storage } from './config'
 
 export async function saveInFirebase(email: string, name: string, file: any) {
@@ -14,8 +14,22 @@ export async function saveInFirebase(email: string, name: string, file: any) {
     const link = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(
       fullPath
     )}?alt=media`
-    return link
+    return [link, fullPath]
   } catch (error) {
-    return console.log('Error', error)
+    throw new Error(error)
   }
+}
+
+export async function deletePhotos(path: string) {
+  // Create a reference to the file to delete
+  const desertRef = ref(storage, path)
+
+  // Delete the file
+  deleteObject(desertRef)
+    .then(() => {
+      return true
+    })
+    .catch(error => {
+      throw new Error(error)
+    })
 }

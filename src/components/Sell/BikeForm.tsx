@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import useAuth from '../../data/hook/useAuth'
 import { saveInFirebase } from '../../firebase/FirebaseStore'
 import { OptionBtnContainer } from '../../styles/components/OptionButton'
@@ -93,8 +93,9 @@ const BikeForm: React.FC = ({}) => {
     }
   }, [bike.cep])
 
-  useEffect(() => {
-    if (userPrismaData?.id) {
+  useLayoutEffect(() => {
+    console.log('useeffect',userPrismaData)
+    if (userPrismaData) {
       setBike({
         ...bike,
         cep: userPrismaData.cep,
@@ -132,7 +133,6 @@ const BikeForm: React.FC = ({}) => {
         return await saveInFirebase(user.email, element.id, element.file)
       })
     )
-
     if (photos.length) {
       fetch(`/api/bike/create `, {
         method: 'POST',
@@ -146,9 +146,10 @@ const BikeForm: React.FC = ({}) => {
         })
       }).then(async result => {
         if (result.status === 200) {
-          const revalidate = await fetch(`${getBaseUrl()}/api/revalidate?secret=${
-            process.env.NEXT_PUBLIC_MY_SECRET_TOKEN
-          }&path=/}
+          const revalidate =
+            await fetch(`${getBaseUrl()}/api/revalidate?secret=${
+              process.env.NEXT_PUBLIC_MY_SECRET_TOKEN
+            }&path=/}
           `)
           setisLoading(false)
           route.push('/')
@@ -172,7 +173,6 @@ const BikeForm: React.FC = ({}) => {
     setStep(newStep)
   }
 
-  console.log(radio)
 
   return (
     <SellFormContainer
@@ -284,7 +284,7 @@ const BikeForm: React.FC = ({}) => {
               customProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
               type="number"
               label="Quantos Horas sua moto possui?"
-              name='hours'
+              name="hours"
               value={bike}
               changeValue={setBike}
             />
