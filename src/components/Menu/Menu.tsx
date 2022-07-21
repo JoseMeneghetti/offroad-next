@@ -6,7 +6,7 @@ import ChangeThemeBtn from './ChangeThemeBtn'
 import AvatarUsuario from './AvatarUsuario'
 import useAuth from '../../data/hook/useAuth'
 import Link from 'next/link'
-import { UserCircle } from 'phosphor-react'
+import { CurrencyCircleDollar, UserCircle } from 'phosphor-react'
 
 const Menu: React.FC = () => {
   const ctx = useTheme()
@@ -19,6 +19,14 @@ const Menu: React.FC = () => {
           <span>RoiaShop</span>
         </div>
       </Link>
+
+      {user && (
+        <MenuItem
+          texto="Meus Anuncios"
+          icone={<CurrencyCircleDollar size={30} />}
+          url="/my-sells"
+        ></MenuItem>
+      )}
 
       <ChangeThemeBtn tema={ctx.theme} changeTheme={ctx.changeTheme} />
 
